@@ -11,4 +11,32 @@ package dto;
  */
 public class CountryTestDTO {
     
+    private int sevenDaySmoothedDailyChange;
+    private int cumulativeTotal;
+
+    public CountryTestDTO(int sevenDaySmoothedDailyChange, int cumulativeTotal) {
+        this.sevenDaySmoothedDailyChange = sevenDaySmoothedDailyChange;
+        this.cumulativeTotal = cumulativeTotal;
+    }
+
+    public int getSevenDaySmoothedDailyChange() {
+        return sevenDaySmoothedDailyChange;
+    }
+
+    public void setSevenDaySmoothedDailyChange(int sevenDaySmoothedDailyChange) {
+        this.sevenDaySmoothedDailyChange = sevenDaySmoothedDailyChange;
+    }
+
+    public int getCumulativeTotal() {
+        return cumulativeTotal;
+    }
+
+    public void setCumulativeTotal(int cumulativeTotal) {
+        this.cumulativeTotal = cumulativeTotal;
+    }
+    
+    
+    
+    
+    
 }
