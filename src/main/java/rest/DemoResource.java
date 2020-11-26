@@ -80,22 +80,14 @@ public class DemoResource {
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
     
-//    @Path("parrallel")
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String getStarWarsParrallel() throws InterruptedException, ExecutionException, TimeoutException {
-//        String result = fetcher.StarWarsFetcher.responseFromExternalServersParrallel(ES, GSON);
-//        cachedResponse = result;
-//        return result;
-//    }
-//
-//    @Path("cached")
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String getStarWarsCached() throws InterruptedException, ExecutionException, TimeoutException {
-//        return cachedResponse;
-//    }
-    
+    @Path("country")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getCountryInfo() throws InterruptedException, ExecutionException, TimeoutException {
+        String result = fetcher.CountryFethcer.responseFromExternalServersParrallel(ES, GSON);
+        return result;
+    }
+
     @Path("setUpUsers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
