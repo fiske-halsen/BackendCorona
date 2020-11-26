@@ -6,16 +6,10 @@
 package fetcher;
 
 import com.google.gson.Gson;
-import dto.CoronaInfoDTO;
-import dto.CountriesDTO;
-import dto.CountryCoronaDTO;
-import dto.CountryTestDTO;
+import dto.CountryDTO;
 import java.io.IOException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import utils.HttpUtils;
 
@@ -28,11 +22,8 @@ public class CountryFetcher {
 
         String countries = HttpUtils.fetchData(COUNTRY_TEST_URL);
         
-        CountriesDTO countriesDTO = gson.fromJson(countries, CountriesDTO.class);
+        CountryDTO[] countryDTO = gson.fromJson(countries, CountryDTO[].class);
         
-        String result = gson.toJson(countriesDTO);
-
-        return result;
+        return gson.toJson(countryDTO);
     }
-    
 }

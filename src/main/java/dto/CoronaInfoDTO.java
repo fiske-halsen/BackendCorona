@@ -4,127 +4,30 @@ package dto;
 
 public class CoronaInfoDTO {
     
-    private String country;
-    private String continent;
-    private String date;
-    private int totalCases;
-    private int newCases;
-    private int totalDeaths;
-    private int newDeaths;
-    private double caseFatalityRatio;
-    private double dailyIncidenceConfirmedCases;
-    private int sevenDaySmoothedDailyChange;
-    private int cumulativeTotal;
+    public String country;
+    public String continent;
+    public String date;
+    public int totalCases;
+    public int newCases;
+    public int totalDeaths;
+    public int newDeaths;
+    public double caseFatalityRatio;
+    public double dailyIncidenceConfirmedCases;
+    public int sevenDaySmoothedDailyChange;
+    public int cumulativeTotal;
 
     public CoronaInfoDTO(CountryCoronaDTO countryCoronaDTO, CountryTestDTO countryTestDTO) {
-        this.country = countryCoronaDTO.getCountry();
-        this.continent = countryCoronaDTO.getContinent();
-        this.date = countryCoronaDTO.getDate();
-        this.totalCases = countryCoronaDTO.getTotalCases();
-        this.newCases = countryCoronaDTO.getNewCases();
-        this.totalDeaths = countryCoronaDTO.getTotalDeaths();
-        this.newDeaths = countryCoronaDTO.getNewDeaths();
-        this.caseFatalityRatio = countryCoronaDTO.getCaseFatalityRatio();
-        this.dailyIncidenceConfirmedCases = countryCoronaDTO.getDailyIncidenceConfirmedCases();
-        this.sevenDaySmoothedDailyChange = countryTestDTO.getSevenDaySmoothedDailyChange();
-        this.cumulativeTotal = countryTestDTO.getCumulativeTotal();
+        this.country = countryCoronaDTO.country;
+        this.continent = countryCoronaDTO.continent;
+        this.date = countryCoronaDTO.date;
+        this.totalCases = countryCoronaDTO.totalCases;
+        this.newCases = countryCoronaDTO.newCases;
+        this.totalDeaths = countryCoronaDTO.totalDeaths;
+        this.newDeaths = countryCoronaDTO.newDeaths;
+        this.caseFatalityRatio = countryCoronaDTO.caseFatalityRatio;
+        this.dailyIncidenceConfirmedCases = countryCoronaDTO.dailyIncidenceConfirmedCases;
+        this.sevenDaySmoothedDailyChange = countryTestDTO.sevenDaySmoothedDailyChange;
+        this.cumulativeTotal = countryTestDTO.cumulativeTotal;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getContinent() {
-        return continent;
-    }
-
-    public void setContinent(String continent) {
-        this.continent = continent;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public int getTotalCases() {
-        return totalCases;
-    }
-
-    public void setTotalCases(int totalCases) {
-        this.totalCases = totalCases;
-    }
-
-    public int getNewCases() {
-        return newCases;
-    }
-
-    public void setNewCases(int newCases) {
-        this.newCases = newCases;
-    }
-
-    public int getTotalDeaths() {
-        return totalDeaths;
-    }
-
-    public void setTotalDeaths(int totalDeaths) {
-        this.totalDeaths = totalDeaths;
-    }
-
-    public int getNewDeaths() {
-        return newDeaths;
-    }
-
-    public void setNewDeaths(int newDeaths) {
-        this.newDeaths = newDeaths;
-    }
-
-    public double getCaseFatalityRatio() {
-        return caseFatalityRatio;
-    }
-
-    public void setCaseFatalityRatio(double caseFatalityRatio) {
-        this.caseFatalityRatio = caseFatalityRatio;
-    }
-
-    public double getDailyIncidenceConfirmedCases() {
-        return dailyIncidenceConfirmedCases;
-    }
-
-    public void setDailyIncidenceConfirmedCases(double dailyIncidenceConfirmedCases) {
-        this.dailyIncidenceConfirmedCases = dailyIncidenceConfirmedCases;
-    }
-
-    public int getSevenDaySmoothedDailyChange() {
-        return sevenDaySmoothedDailyChange;
-    }
-
-    public void setSevenDaySmoothedDailyChange(int sevenDaySmoothedDailyChange) {
-        this.sevenDaySmoothedDailyChange = sevenDaySmoothedDailyChange;
-    }
-
-    public int getCumulativeTotal() {
-        return cumulativeTotal;
-    }
-
-    public void setCumulativeTotal(int cumulativeTotal) {
-        this.cumulativeTotal = cumulativeTotal;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

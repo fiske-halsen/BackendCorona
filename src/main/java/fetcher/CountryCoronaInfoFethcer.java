@@ -15,8 +15,8 @@ import utils.HttpUtils;
 
 public class CountryCoronaInfoFethcer {
 
-    private static String COUNTRY_CORONA_URL = "https://api.covid19api.com/premium/country/denmark";
-    private static String COUNTRY_TEST_URL = "https://api.covid19api.com/premium/country/testing/denmark";
+    private static String COUNTRY_CORONA_URL = "https://api.covid19api.com/premium/country/spain";
+    private static String COUNTRY_TEST_URL = "https://api.covid19api.com/premium/country/testing/spain";
 
     public static String responseFromExternalServersParrallel(ExecutorService threadPool, Gson gson) throws InterruptedException, ExecutionException, TimeoutException {
 
