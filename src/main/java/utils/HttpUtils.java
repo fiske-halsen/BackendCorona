@@ -15,6 +15,7 @@ public class HttpUtils {
     //con.setRequestProperty("Accept", "application/json;charset=UTF-8");
     con.setRequestProperty("Accept", "application/json");
     con.setRequestProperty("User-Agent", "server"); //remember if you are using SWAPI
+    con.setRequestProperty("X-Access-Token", "f30b264d-e56c-46db-8780-2e151d7ab22d");
     Scanner scan = new Scanner(con.getInputStream());
     String jsonStr = "";
     while(scan.hasNext()) {

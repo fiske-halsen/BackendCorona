@@ -4,18 +4,9 @@ package dto;
 
 public class CountryDTO {
     
-    private String country;
+    public String Country;
 
     public CountryDTO(String country) {
-        this.country = country;
+        this.Country = country;
     }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-    
 }
