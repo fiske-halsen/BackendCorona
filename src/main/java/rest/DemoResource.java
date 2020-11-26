@@ -89,7 +89,7 @@ public class DemoResource {
         return result;
     }
 
-     @Path("countries")
+    @Path("countries")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
