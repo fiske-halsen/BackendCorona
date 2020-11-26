@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import utils.HttpUtils;
 
-public class CountryFethcer {
+public class CountryCoronaInfoFethcer {
 
     private static String COUNTRY_CORONA_URL = "https://api.covid19api.com/premium/country/denmark";
     private static String COUNTRY_TEST_URL = "https://api.covid19api.com/premium/country/testing/denmark";
@@ -34,8 +34,8 @@ public class CountryFethcer {
             @Override
             public CountryTestDTO call() throws Exception {
                 String countryTest = HttpUtils.fetchData(COUNTRY_TEST_URL);
-                CountryTestDTO countryTestDTO = gson.fromJson(countryTest, CountryTestDTO.class);
-
+                CountryTestDTO[] countryTestList = gson.fromJson(countryTest, CountryTestDTO[].class);
+                CountryTestDTO countryTestDTO = countryTestList[countryTestList.length-1];
                 return countryTestDTO;
             }
         };

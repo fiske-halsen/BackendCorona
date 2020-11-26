@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.User;
 import facades.FacadeExample;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -84,10 +85,18 @@ public class DemoResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getCountryInfo() throws InterruptedException, ExecutionException, TimeoutException {
-        String result = fetcher.CountryFethcer.responseFromExternalServersParrallel(ES, GSON);
+        String result = fetcher.CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON);
         return result;
     }
 
+     @Path("countries")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
+        return fetcher.CountryFetcher.responseFromExternalServersSequential(ES, GSON);
+    }
+    
+    
     @Path("setUpUsers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
