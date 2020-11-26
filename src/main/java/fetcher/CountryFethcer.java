@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dto.CoronaInfoDTO;
 import dto.CountryCoronaDTO;
 import dto.CountryTestDTO;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -23,8 +24,8 @@ public class CountryFethcer {
             @Override
             public CountryCoronaDTO call() throws Exception {
                 String countryCorona = HttpUtils.fetchData(COUNTRY_CORONA_URL);
-                CountryCoronaDTO countryCoronaDTO = gson.fromJson(countryCorona, CountryCoronaDTO.class);
-
+                CountryCoronaDTO[] countryList = gson.fromJson(countryCorona, CountryCoronaDTO[].class);
+                CountryCoronaDTO countryCoronaDTO = countryList[countryList.length-1];
                 return countryCoronaDTO;
             }
         };
