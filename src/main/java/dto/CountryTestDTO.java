@@ -11,11 +11,11 @@ package dto;
  */
 public class CountryTestDTO {
     
-    public int sevenDaySmoothedDailyChange;
-    public int cumulativeTotal;
+    public int SevenDaySmoothedDailyChange;
+    public int CumulativeTotal;
 
     public CountryTestDTO(int sevenDaySmoothedDailyChange, int cumulativeTotal) {
-        this.sevenDaySmoothedDailyChange = sevenDaySmoothedDailyChange;
-        this.cumulativeTotal = cumulativeTotal;
+        this.SevenDaySmoothedDailyChange = sevenDaySmoothedDailyChange;
+        this.CumulativeTotal = cumulativeTotal;
     }   
 }
