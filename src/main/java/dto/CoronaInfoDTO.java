@@ -4,30 +4,30 @@ package dto;
 
 public class CoronaInfoDTO {
     
-    public String country;
-    public String continent;
-    public String date;
-    public int totalCases;
-    public int newCases;
-    public int totalDeaths;
-    public int newDeaths;
-    public double caseFatalityRatio;
-    public double dailyIncidenceConfirmedCases;
-    public int sevenDaySmoothedDailyChange;
-    public int cumulativeTotal;
+    public String Country;
+    public String Continent;
+    public String Date;
+    public int TotalCases;
+    public int NewCases;
+    public int TotalDeaths;
+    public int NewDeaths;
+    public double CaseFatalityRatio;
+    public double DailyIncidenceConfirmedCases;
+    public int SevenDaySmoothedDailyChange;
+    public int CumulativeTotal;
 
     public CoronaInfoDTO(CountryCoronaDTO countryCoronaDTO, CountryTestDTO countryTestDTO) {
-        this.country = countryCoronaDTO.country;
-        this.continent = countryCoronaDTO.continent;
-        this.date = countryCoronaDTO.date;
-        this.totalCases = countryCoronaDTO.totalCases;
-        this.newCases = countryCoronaDTO.newCases;
-        this.totalDeaths = countryCoronaDTO.totalDeaths;
-        this.newDeaths = countryCoronaDTO.newDeaths;
-        this.caseFatalityRatio = countryCoronaDTO.caseFatalityRatio;
-        this.dailyIncidenceConfirmedCases = countryCoronaDTO.dailyIncidenceConfirmedCases;
-        this.sevenDaySmoothedDailyChange = countryTestDTO.sevenDaySmoothedDailyChange;
-        this.cumulativeTotal = countryTestDTO.cumulativeTotal;
+        this.Country = countryCoronaDTO.Country;
+        this.Continent = countryCoronaDTO.Continent;
+        this.Date = countryCoronaDTO.Date;
+        this.TotalCases = countryCoronaDTO.TotalCases;
+        this.NewCases = countryCoronaDTO.NewCases;
+        this.TotalDeaths = countryCoronaDTO.TotalDeaths;
+        this.NewDeaths = countryCoronaDTO.NewDeaths;
+        this.CaseFatalityRatio = countryCoronaDTO.CaseFatalityRatio;
+        this.DailyIncidenceConfirmedCases = countryCoronaDTO.DailyIncidenceConfirmedCases;
+        this.SevenDaySmoothedDailyChange = countryTestDTO.SevenDaySmoothedDailyChange;
+        this.CumulativeTotal = countryTestDTO.CumulativeTotal;
     }
 
 }
