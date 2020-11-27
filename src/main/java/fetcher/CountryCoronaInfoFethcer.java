@@ -15,17 +15,17 @@ import utils.HttpUtils;
 
 public class CountryCoronaInfoFethcer {
 
-    private static String COUNTRY_CORONA_URL = "https://api.covid19api.com/premium/country/spain";
-    private static String COUNTRY_TEST_URL = "https://api.covid19api.com/premium/country/testing/spain";
+    private static String COUNTRY_CORONA_URL = "https://api.covid19api.com/premium/country/";
+    private static String COUNTRY_TEST_URL = "https://api.covid19api.com/premium/country/testing/";
 
-    public static String responseFromExternalServersParrallel(ExecutorService threadPool, Gson gson) throws InterruptedException, ExecutionException, TimeoutException {
+    public static String responseFromExternalServersParrallel(ExecutorService threadPool, Gson gson, String country) throws InterruptedException, ExecutionException, TimeoutException {
 
         Callable<CountryCoronaDTO> countryCoronaTask = new Callable<CountryCoronaDTO>() {
             @Override
             public CountryCoronaDTO call() throws Exception {
-                String countryCorona = HttpUtils.fetchData(COUNTRY_CORONA_URL);
+                String countryCorona = HttpUtils.fetchData(COUNTRY_CORONA_URL + country);
                 CountryCoronaDTO[] countryList = gson.fromJson(countryCorona, CountryCoronaDTO[].class);
-                CountryCoronaDTO countryCoronaDTO = countryList[countryList.length-1];
+                CountryCoronaDTO countryCoronaDTO = countryList[countryList.length - 1];
                 return countryCoronaDTO;
             }
         };
@@ -33,9 +33,9 @@ public class CountryCoronaInfoFethcer {
         Callable<CountryTestDTO> countryTestTask = new Callable<CountryTestDTO>() {
             @Override
             public CountryTestDTO call() throws Exception {
-                String countryTest = HttpUtils.fetchData(COUNTRY_TEST_URL);
+                String countryTest = HttpUtils.fetchData(COUNTRY_TEST_URL + country);
                 CountryTestDTO[] countryTestList = gson.fromJson(countryTest, CountryTestDTO[].class);
-                CountryTestDTO countryTestDTO = countryTestList[countryTestList.length-1];
+                CountryTestDTO countryTestDTO = countryTestList[countryTestList.length - 1];
                 return countryTestDTO;
             }
         };
