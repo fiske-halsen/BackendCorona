@@ -1,5 +1,6 @@
 package facades;
 
+import entities.Role;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -41,6 +42,32 @@ public class UserFacade {
             em.close();
         }
         return user;
+    }
+
+    public User createUser(String username, String password1, String password2) throws AuthenticationException {
+        if (password1.equals(password2)) {
+            EntityManager em = emf.createEntityManager();
+            User user = new User(username, password1);
+            Role userRole = new Role("user");
+            user.addRole(userRole);
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+
+            try {
+                user = em.find(User.class, username);
+                if (user == null || !user.verifyPassword(password1)) {
+                    throw new AuthenticationException("Invalid user name or password");
+                }
+            } finally {
+                em.close();
+            }
+            return user;
+
+        } else {
+            throw new AuthenticationException("Your password didn't match");
+        }
+
     }
 
 }

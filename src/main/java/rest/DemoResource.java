@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.User;
 import facades.FacadeExample;
+import fetcher.CountryCoronaInfoFethcer;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import utils.EMF_Creator;
@@ -27,9 +29,9 @@ import utils.SetupTestUsers;
 /**
  * @author lam@cphbusiness.dk
  */
-@Path("info")
+@Path("corona")
 public class DemoResource {
-    
+
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final ExecutorService ES = Executors.newCachedThreadPool();
     private static final FacadeExample FACADE = FacadeExample.getFacadeExample(EMF);
@@ -55,7 +57,7 @@ public class DemoResource {
 
         EntityManager em = EMF.createEntityManager();
         try {
-            TypedQuery<User> query = em.createQuery ("select u from User u",entities.User.class);
+            TypedQuery<User> query = em.createQuery("select u from User u", entities.User.class);
             List<User> users = query.getResultList();
             return "[" + users.size() + "]";
         } finally {
@@ -80,13 +82,13 @@ public class DemoResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
-    
-    @Path("country")
+
+    @Path("country/{country}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getCountryInfo() throws InterruptedException, ExecutionException, TimeoutException {
-        String result = fetcher.CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON);
-        return result;
+    public String getPersonsByHobby(@PathParam("country") String country) throws InterruptedException, ExecutionException, TimeoutException {
+       return CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON, country);
+
     }
 
     @Path("countries")
@@ -95,13 +97,12 @@ public class DemoResource {
     public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         return fetcher.CountryFetcher.responseFromExternalServersSequential(ES, GSON);
     }
-    
-    
+
     @Path("setUpUsers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public void setUpUsers() {
         SetupTestUsers.setUpUsers();
     }
-    
+
 }
