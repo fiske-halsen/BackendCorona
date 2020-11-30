@@ -35,6 +35,9 @@ public class User implements Serializable {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
+  
+  @ManyToMany
+  private List<OrderTest> orderTests = new ArrayList();
 
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
@@ -89,4 +92,14 @@ public class User implements Serializable {
     roleList.add(userRole);
   }
 
+    public List<OrderTest> getOrderTests() {
+        return orderTests;
+    }
+
+    public void addOrderTest(OrderTest orderTest) {
+        if(orderTest != null){
+            this.orderTests.add(orderTest);
+            orderTest.getUsers().add(this);
+        }
+    }
 }

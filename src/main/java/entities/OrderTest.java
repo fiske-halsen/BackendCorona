@@ -6,10 +6,14 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -27,6 +31,16 @@ public class OrderTest implements Serializable {
     
     @ManyToOne
     private Address address;
+    
+    @ManyToMany(mappedBy = "orderTests", cascade = CascadeType.PERSIST)
+    private List<User> users = new ArrayList();
+
+    public OrderTest() {
+    }
+
+    public OrderTest(String email) {
+        this.email = email;
+    }
     
     public long getId() {
         return id;
@@ -51,4 +65,17 @@ public class OrderTest implements Serializable {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void addUser(User user) {
+        if(user != null){
+            this.users.add(user);
+            user.getOrderTests().add(this);
+        }
+    }
+    
+    
 }

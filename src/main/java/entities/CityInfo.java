@@ -29,6 +29,16 @@ public class CityInfo implements Serializable {
     @OneToMany(mappedBy = "cityInfo", cascade = CascadeType.PERSIST)
     List<Address> addresses;
 
+    public CityInfo() {
+    }
+
+    public CityInfo(String zip, String city) {
+        this.zip = zip;
+        this.city = city;
+    }
+    
+    
+
     public String getZip() {
         return zip;
     }
@@ -44,4 +54,16 @@ public class CityInfo implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void addAddress(Address  address) {
+        this.addresses.add(address);
+        if(address != null){
+            address.setCityInfo(this);
+        }
+    }
+    
 }
