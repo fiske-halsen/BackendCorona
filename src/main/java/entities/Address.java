@@ -24,6 +24,13 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String street;
+
+    public Address() {
+    }
+
+    public Address(String street) {
+        this.street = street;
+    }
     
     @ManyToOne
     private CityInfo cityInfo;
@@ -62,4 +69,5 @@ public class Address implements Serializable {
     public void setCountry(Country country) {
         this.country = country;
     }
+    
 }

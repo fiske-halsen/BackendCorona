@@ -1,6 +1,10 @@
 package utils;
 
 
+import entities.Address;
+import entities.CityInfo;
+import entities.Country;
+import entities.OrderTest;
 import entities.Role;
 import entities.User;
 
@@ -23,22 +27,40 @@ public class SetupTestUsers {
     User user = new User("user", "testuser");
     User admin = new User("admin", "testadmin");
     User both = new User("user_admin", "testuseradmin");
+    Role userRole = new Role("user");
+    Role adminRole = new Role("admin");
+    Country country = new Country("Danmark");
+    CityInfo cityInfo = new CityInfo("3000", "Helsingør");
+    Address address = new Address("Skansedalen 12");
+    OrderTest orderTest = new OrderTest("sebastian@godskhansen.dk");
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");
 
     em.getTransaction().begin();
-    Role userRole = new Role("user");
-    Role adminRole = new Role("admin");
+    
+    address.setCountry(country);
+    address.setCityInfo(cityInfo);
+    
+    orderTest.setAddress(address);
+    
+    user.addOrderTest(orderTest);
+    
     user.addRole(userRole);
     admin.addRole(adminRole);
     both.addRole(userRole);
     both.addRole(adminRole);
+    
+    em.persist(country);
+    em.persist(cityInfo);
+    em.persist(address);
+    em.persist(orderTest);
     em.persist(userRole);
     em.persist(adminRole);
     em.persist(user);
     em.persist(admin);
     em.persist(both);
+    
     em.getTransaction().commit();
     System.out.println("PW: " + user.getUserPass());
     System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
