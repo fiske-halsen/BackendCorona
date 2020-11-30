@@ -1,5 +1,9 @@
 package facades;
 
+import entities.Address;
+import entities.CityInfo;
+import entities.Country;
+import entities.OrderTest;
 import utils.EMF_Creator;
 import entities.RenameMe;
 import entities.Role;
@@ -81,5 +85,33 @@ public class FacadeExampleTest {
         User user = facade.getVeryfiedUser("admin", "test");
         assertEquals("admin", admin.getUserName());
     }
+    
+//    @Test
+//    public void orderTest(User user, String country, String zip, String street, String city){
+//        
+//        EntityManager em = emf.createEntityManager();
+//        
+//        Country c = new Country(country);
+//        CityInfo ci = new CityInfo(zip, city);
+//        Address a = new Address(street);
+//        
+//        a.setCityInfo(ci);
+//        a.setCountry(c);
+//        OrderTest ot = new OrderTest(user.getUserName());
+//        ot.setAddress(a);
+//        user.addOrderTest(ot);
+//        
+//         em.getTransaction().begin();
+//         
+//         em.persist(c);
+//         em.persist(ci);
+//         em.persist(a);
+//         em.persist(ot);
+//  
+//         em.getTransaction().commit();
+//        
+//         
+//        
+//    }
 
 }

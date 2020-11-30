@@ -2,8 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.OrderTestDTO;
+import entities.OrderTest;
 import entities.User;
 import facades.FacadeExample;
+import facades.UserFacade;
 import fetcher.CountryCoronaInfoFethcer;
 import java.io.IOException;
 import java.util.List;
@@ -15,13 +18,16 @@ import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import utils.EMF_Creator;
 import utils.SetupTestUsers;
@@ -34,9 +40,11 @@ public class DemoResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final ExecutorService ES = Executors.newCachedThreadPool();
-    private static final FacadeExample FACADE = FacadeExample.getFacadeExample(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static String cachedResponse;
+    private static final UserFacade FACADE = UserFacade.getUserFacade(EMF);
+    
+    
     @Context
     private UriInfo context;
 
@@ -97,6 +105,28 @@ public class DemoResource {
     public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         return fetcher.CountryFetcher.responseFromExternalServersSequential(ES, GSON);
     }
+    
+    @Path("ordertest")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response orderTest(User user, String country, String zip, String street, String city) {
+       OrderTestDTO ot = new OrderTestDTO(FACADE.orderTest(user, country, zip, street, city));
+       return Response.ok(ot).build();
+    }
+    
+    
+//        @Path("add")
+//    @POST
+//    @Produces({MediaType.APPLICATION_JSON})
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response addPerson(String person) {
+//        PersonDTO p = GSON.fromJson(person, PersonDTO.class);
+//        p = FACADE.createNewPerson(p);
+//        return Response.ok(p).build();
+//    }
+
+
 
     @Path("setUpUsers")
     @GET
@@ -104,5 +134,7 @@ public class DemoResource {
     public void setUpUsers() {
         SetupTestUsers.setUpUsers();
     }
+    
+    
 
 }
