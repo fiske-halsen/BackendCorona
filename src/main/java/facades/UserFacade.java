@@ -1,10 +1,15 @@
 package facades;
 
+import entities.Address;
+import entities.CityInfo;
+import entities.Country;
+import entities.OrderTest;
 import entities.Role;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import security.errorhandling.AuthenticationException;
+import utils.EMF_Creator;
 
 /**
  * @author lam@cphbusiness.dk
@@ -13,6 +18,7 @@ public class UserFacade {
 
     private static EntityManagerFactory emf;
     private static UserFacade instance;
+    EntityManager em = emf.createEntityManager();
 
     private UserFacade() {
     }
@@ -69,5 +75,30 @@ public class UserFacade {
         }
 
     }
+    
+    
+    public OrderTest orderTest(User user, String country, String zip, String street, String city){
+        
+        Country c = new Country(country);
+        CityInfo ci = new CityInfo(zip, city);
+        Address a = new Address(street);
+        
+        a.setCityInfo(ci);
+        a.setCountry(c);
+        OrderTest ot = new OrderTest(user.getUserName());
+        ot.setAddress(a);
+        user.addOrderTest(ot);
+        
+         em.getTransaction().begin();
+         
+         em.persist(c);
+         em.persist(ci);
+         em.persist(a);
+         em.persist(ot);
+  
+         em.getTransaction().commit();
+         return ot;
+    }
+    
 
 }

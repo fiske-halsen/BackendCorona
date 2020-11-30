@@ -1,10 +1,13 @@
 package facades;
 
 import entities.RenameMe;
+import entities.Role;
+import entities.User;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import utils.EMF_Creator;
 
 /**
  *
@@ -45,6 +48,21 @@ public class FacadeExample {
         }finally{  
             em.close();
         }
+        
+    }
+    
+    public static void main(String[] args) {
+            EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+
+     UserFacade FACADE = UserFacade.getUserFacade(EMF);
+      User user;
+      Role userRole = new Role("user");
+      user = new User("user2", "test");
+      user.addRole(userRole);
+     
+     
+     FACADE.orderTest(user, "denmark", "2630", "taastrupvej1", "taastrup");
+     
         
     }
 
