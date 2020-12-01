@@ -125,7 +125,7 @@ public class DemoResource {
 //        p = FACADE.createNewPerson(p);
 //        return Response.ok(p).build();
 //    }
-    @Path("setUpUsers")
+    @Path("setupusers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public void setUpUsers() {
