@@ -78,25 +78,25 @@ public class UserFacade {
     }
 
     public OrderTestDTO orderTest(OrderTestDTO orderTestDTO) {
-
+        EntityManager em = emf.createEntityManager();
         Country country = new Country(orderTestDTO.country);
         CityInfo cityInfo = new CityInfo(orderTestDTO.zip, orderTestDTO.city);
         Address address = new Address(orderTestDTO.street);
         OrderTest orderTest = new OrderTest(orderTestDTO.email);
-
+        User user = em.find(User.class, orderTestDTO.email);
+        
         address.setCityInfo(cityInfo);
         address.setCountry(country);
         orderTest.setAddress(address);
+        orderTest.addUser(user);
 
         em.getTransaction().begin();
+
         
-        em.persist(country);
-        em.persist(cityInfo);
-        em.persist(address);
         em.persist(orderTest);
-        
+
         em.getTransaction().commit();
-        
+
         return orderTestDTO;
     }
 
