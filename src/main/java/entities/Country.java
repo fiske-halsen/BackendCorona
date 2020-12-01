@@ -23,8 +23,6 @@ public class Country implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String country;
     
     @OneToMany(mappedBy = "country", cascade = CascadeType.PERSIST)
@@ -47,13 +45,6 @@ public class Country implements Serializable {
         this.country = country;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public List<Address> getAddresses() {
         return addresses;

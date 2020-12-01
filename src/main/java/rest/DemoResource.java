@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import dto.OrderTestDTO;
 import entities.OrderTest;
 import entities.User;
-import facades.FacadeExample;
 import facades.UserFacade;
 import fetcher.CountryCoronaInfoFethcer;
 import java.io.IOException;
@@ -43,8 +42,7 @@ public class DemoResource {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static String cachedResponse;
     private static final UserFacade FACADE = UserFacade.getUserFacade(EMF);
-    
-    
+
     @Context
     private UriInfo context;
 
@@ -95,7 +93,7 @@ public class DemoResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPersonsByHobby(@PathParam("country") String country) throws InterruptedException, ExecutionException, TimeoutException {
-       return CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON, country);
+        return CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON, country);
 
     }
 
@@ -105,17 +103,19 @@ public class DemoResource {
     public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         return fetcher.CountryFetcher.responseFromExternalServersSequential(ES, GSON);
     }
-    
+
     @Path("ordertest")
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response orderTest(User user, String country, String zip, String street, String city) {
-       OrderTestDTO ot = new OrderTestDTO(FACADE.orderTest(user, country, zip, street, city));
-       return Response.ok(ot).build();
+    @RolesAllowed({"user","admin"})
+    public Response orderTest(String orderTestJson) {
+        OrderTestDTO orderTestDTO = GSON.fromJson(orderTestJson, OrderTestDTO.class);
+        orderTestDTO = FACADE.orderTest(orderTestDTO);
+
+        return Response.ok(orderTestDTO).build();
     }
-    
-    
+
 //        @Path("add")
 //    @POST
 //    @Produces({MediaType.APPLICATION_JSON})
@@ -125,16 +125,11 @@ public class DemoResource {
 //        p = FACADE.createNewPerson(p);
 //        return Response.ok(p).build();
 //    }
-
-
-
     @Path("setUpUsers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public void setUpUsers() {
         SetupTestUsers.setUpUsers();
     }
-    
-    
 
 }
