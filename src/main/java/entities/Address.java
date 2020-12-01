@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class Address implements Serializable {
     public Address(String street) {
         this.street = street;
     }
+    
     
     @ManyToOne
     private CityInfo cityInfo;

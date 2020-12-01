@@ -29,7 +29,7 @@ public class OrderTest implements Serializable {
     private long id;
     private String email;
     
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     private Address address;
     
     @ManyToMany(mappedBy = "orderTests", cascade = CascadeType.PERSIST)

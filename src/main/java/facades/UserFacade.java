@@ -79,8 +79,8 @@ public class UserFacade {
 
     public OrderTestDTO orderTest(OrderTestDTO orderTestDTO) {
         EntityManager em = emf.createEntityManager();
-        Country country = new Country(orderTestDTO.country);
-        CityInfo cityInfo = new CityInfo(orderTestDTO.zip, orderTestDTO.city);
+        Country country = em.find(Country.class, orderTestDTO.country);
+        CityInfo cityInfo = em.find(CityInfo.class, orderTestDTO.city);
         Address address = new Address(orderTestDTO.street);
         OrderTest orderTest = new OrderTest(orderTestDTO.email);
         User user = em.find(User.class, orderTestDTO.email);
@@ -92,7 +92,6 @@ public class UserFacade {
 
         em.getTransaction().begin();
 
-        
         em.persist(orderTest);
 
         em.getTransaction().commit();
