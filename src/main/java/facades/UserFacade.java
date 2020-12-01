@@ -1,5 +1,6 @@
 package facades;
 
+import dto.OrderTestDTO;
 import entities.Address;
 import entities.CityInfo;
 import entities.Country;
@@ -75,30 +76,28 @@ public class UserFacade {
         }
 
     }
-    
-    
-    public OrderTest orderTest(User user, String country, String zip, String street, String city){
+
+    public OrderTestDTO orderTest(OrderTestDTO orderTestDTO) {
+
+        Country country = new Country(orderTestDTO.country);
+        CityInfo cityInfo = new CityInfo(orderTestDTO.zip, orderTestDTO.city);
+        Address address = new Address(orderTestDTO.street);
+        OrderTest orderTest = new OrderTest(orderTestDTO.email);
+
+        address.setCityInfo(cityInfo);
+        address.setCountry(country);
+        orderTest.setAddress(address);
+
+        em.getTransaction().begin();
         
-        Country c = new Country(country);
-        CityInfo ci = new CityInfo(zip, city);
-        Address a = new Address(street);
+        em.persist(country);
+        em.persist(cityInfo);
+        em.persist(address);
+        em.persist(orderTest);
         
-        a.setCityInfo(ci);
-        a.setCountry(c);
-        OrderTest ot = new OrderTest(user.getUserName());
-        ot.setAddress(a);
-        user.addOrderTest(ot);
+        em.getTransaction().commit();
         
-         em.getTransaction().begin();
-         
-         em.persist(c);
-         em.persist(ci);
-         em.persist(a);
-         em.persist(ot);
-  
-         em.getTransaction().commit();
-         return ot;
+        return orderTestDTO;
     }
-    
 
 }
