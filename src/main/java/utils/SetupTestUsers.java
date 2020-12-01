@@ -29,8 +29,8 @@ public class SetupTestUsers {
     User both = new User("user_admin", "testuseradmin");
     Role userRole = new Role("user");
     Role adminRole = new Role("admin");
-    Country country = new Country("Danmark");
-    CityInfo cityInfo = new CityInfo("3000", "Helsingør");
+    //Country country = new Country("Denmark");
+    //CityInfo cityInfo = new CityInfo("3000", "Helsingør");
     Address address = new Address("Skansedalen 12");
     OrderTest orderTest = new OrderTest("sebastian@godskhansen.dk");
 
@@ -39,8 +39,8 @@ public class SetupTestUsers {
 
     em.getTransaction().begin();
     
-    address.setCountry(country);
-    address.setCityInfo(cityInfo);
+    address.setCountry(em.find(Country.class, 1));
+    address.setCityInfo(em.find(CityInfo.class, "3000"));
     
     orderTest.setAddress(address);
     
@@ -51,9 +51,6 @@ public class SetupTestUsers {
     both.addRole(userRole);
     both.addRole(adminRole);
     
-    em.persist(country);
-    em.persist(cityInfo);
-    em.persist(address);
     em.persist(orderTest);
     em.persist(userRole);
     em.persist(adminRole);
