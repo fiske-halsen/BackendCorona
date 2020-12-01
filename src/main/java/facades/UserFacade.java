@@ -7,6 +7,7 @@ import entities.Country;
 import entities.OrderTest;
 import entities.Role;
 import entities.User;
+import errorhandling.OrderTestException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import security.errorhandling.AuthenticationException;
@@ -77,13 +78,22 @@ public class UserFacade {
 
     }
 
-    public OrderTestDTO orderTest(OrderTestDTO orderTestDTO) {
+    public OrderTestDTO orderTest(OrderTestDTO orderTestDTO) throws OrderTestException {
         EntityManager em = emf.createEntityManager();
         Country country = em.find(Country.class, orderTestDTO.country );
         CityInfo cityInfo = em.find(CityInfo.class, orderTestDTO.zip);
         Address address = new Address(orderTestDTO.street);
         OrderTest orderTest = new OrderTest(orderTestDTO.email);
         User user = em.find(User.class, orderTestDTO.email);
+        
+        if(country == null || cityInfo == null || user == null){
+            
+            throw new OrderTestException("Country has to be 'Denmark' and remember to be logged in");
+        }
+        
+        
+        
+        
         
         address.setCityInfo(cityInfo);
         address.setCountry(country);
