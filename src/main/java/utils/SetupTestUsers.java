@@ -39,7 +39,7 @@ public class SetupTestUsers {
 
     em.getTransaction().begin();
     
-    address.setCountry(em.find(Country.class, 1));
+    address.setCountry(em.find(Country.class, "Denmark"));
     address.setCityInfo(em.find(CityInfo.class, "3000"));
     
     orderTest.setAddress(address);
