@@ -1,5 +1,14 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dto.CoronaInfoDTO;
+import dto.CountryCoronaDTO;
+import dto.CountryTestDTO;
+import dto.OrderTestDTO;
+import entities.Address;
+import entities.CityInfo;
+import entities.Country;
 import entities.User;
 import entities.Role;
 
@@ -8,6 +17,10 @@ import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -22,7 +35,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
-@Disabled
+//@Disabled
 public class LoginEndpointTest {
 
     private static final int SERVER_PORT = 7777;
@@ -31,6 +44,11 @@ public class LoginEndpointTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+    private static final ExecutorService ES = Executors.newCachedThreadPool();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    
+    private CoronaInfoDTO coronaInfoDTO;
+    private OrderTestDTO orderTestDTO;
     
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -72,6 +90,12 @@ public class LoginEndpointTest {
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
             User user = new User("user", "test");
+            Country country = new Country("Japan");
+            CityInfo cityInfo = new CityInfo("4000", "Taastrup");
+            Address address = new Address("Testgade123");
+            address.setCountry(country);
+            address.setCityInfo(cityInfo);
+            
             user.addRole(userRole);
             User admin = new User("admin", "test");
             admin.addRole(adminRole);
@@ -83,6 +107,10 @@ public class LoginEndpointTest {
             em.persist(user);
             em.persist(admin);
             em.persist(both);
+            
+//            em.persist(cityInfo);
+//            em.persist(address);
+//            em.persist(country);
             //System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {
@@ -112,7 +140,7 @@ public class LoginEndpointTest {
 
     @Test
     public void serverIsRunning() {
-        given().when().get("/info").then().statusCode(200);
+        given().when().get("/corona").then().statusCode(200);
     }
 
     @Test
@@ -120,7 +148,7 @@ public class LoginEndpointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("/info/").then()
+                .get("/corona/").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello anonymous"));
     }
@@ -133,7 +161,7 @@ public class LoginEndpointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/admin").then()
+                .get("/corona/admin").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to (admin) User: admin"));
     }
@@ -145,7 +173,7 @@ public class LoginEndpointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/user").then()
+                .get("/corona/user").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to User: user"));
     }
@@ -157,7 +185,7 @@ public class LoginEndpointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/admin").then() //Call Admin endpoint as user
+                .get("/corona/admin").then() //Call Admin endpoint as user
                 .statusCode(401);
     }
 
@@ -168,7 +196,7 @@ public class LoginEndpointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/user").then() //Call User endpoint as Admin
+                .get("/corona/user").then() //Call User endpoint as Admin
                 .statusCode(401);
     }
 
@@ -180,7 +208,7 @@ public class LoginEndpointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/admin").then()
+                .get("/corona/admin").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to (admin) User: user_admin"));
     }
@@ -192,7 +220,7 @@ public class LoginEndpointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/user").then()
+                .get("/corona/user").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to User: user_admin"));
     }
@@ -203,7 +231,7 @@ public class LoginEndpointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("/info/user").then()
+                .get("/corona/user").then()
                 .statusCode(403)
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
@@ -215,10 +243,71 @@ public class LoginEndpointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("/info/user").then()
+                .get("/corona/user").then()
                 .statusCode(403)
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
+    }
+    @Test
+    public void testRestForAllRoles() {
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/corona/all").then()
+                .statusCode(200)
+                .body(equalTo("[3]"));       
+    }
+    
+     @Test
+    public void testRestForAllCountries() {
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/corona/countries").then()
+                .statusCode(200)
+                .body("size()", equalTo(248));       
+    }
+    
+         @Test
+    public void testRestForOneCountry() throws InterruptedException, ExecutionException, TimeoutException {
+        String country = "Denmark";
+        coronaInfoDTO = GSON.fromJson(fetcher.CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON, country), CoronaInfoDTO.class);
+        
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/corona/country/denmark").then()
+                .statusCode(200)
+                .body("Country", equalTo(coronaInfoDTO.Country))
+                .body("Date", equalTo(coronaInfoDTO.Date))
+                .body("TotalCases", equalTo(coronaInfoDTO.TotalCases))
+                .body("NewCases", equalTo(coronaInfoDTO.NewCases))
+                .body("TotalDeaths", equalTo(coronaInfoDTO.TotalDeaths))   
+                .body("NewDeaths", equalTo(coronaInfoDTO.NewDeaths))
+                .body("CaseFatalityRatio", equalTo(coronaInfoDTO.CaseFatalityRatio))
+                .body("DailyIncidenceConfirmedCases", equalTo(coronaInfoDTO.DailyIncidenceConfirmedCases))
+                .body("SevenDaySmoothedDailyChange", equalTo(coronaInfoDTO.SevenDaySmoothedDailyChange))
+                .body("CumulativeTotal", equalTo(coronaInfoDTO.CumulativeTotal));
+             
+    }
+    
+        @Test
+    public void testRestOrderTest() {
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .post("/corona/ordertest")
+                .then()
+                .statusCode(200)
+                .body("country", equalTo("Japan"))
+                .body("city", equalTo("Taastrup"))  
+                .body("zip", equalTo("4000"))  
+                .body("street", equalTo("Testgade123"))  
+                .body("email", equalTo("user"));  
+                
     }
 
 }

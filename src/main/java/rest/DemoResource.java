@@ -116,15 +116,7 @@ public class DemoResource {
         return Response.ok(orderTestDTO).build();
     }
 
-//        @Path("add")
-//    @POST
-//    @Produces({MediaType.APPLICATION_JSON})
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response addPerson(String person) {
-//        PersonDTO p = GSON.fromJson(person, PersonDTO.class);
-//        p = FACADE.createNewPerson(p);
-//        return Response.ok(p).build();
-//    }
+
     @Path("setupusers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})

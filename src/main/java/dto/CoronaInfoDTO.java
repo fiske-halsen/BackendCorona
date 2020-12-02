@@ -11,8 +11,8 @@ public class CoronaInfoDTO {
     public int NewCases;
     public int TotalDeaths;
     public int NewDeaths;
-    public double CaseFatalityRatio;
-    public double DailyIncidenceConfirmedCases;
+    public float CaseFatalityRatio;
+    public float DailyIncidenceConfirmedCases;
     public int SevenDaySmoothedDailyChange;
     public int CumulativeTotal;
 

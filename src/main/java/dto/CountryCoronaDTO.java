@@ -18,10 +18,10 @@ public class CountryCoronaDTO {
     public int NewCases;
     public int TotalDeaths;
     public int NewDeaths;
-    public double CaseFatalityRatio;
-    public double DailyIncidenceConfirmedCases;
+    public float CaseFatalityRatio;
+    public float DailyIncidenceConfirmedCases;
 
-    public CountryCoronaDTO(String country, String continent, String date, int totalCases, int newCases, int totalDeaths, int newDeaths, double caseFatalityRatio, double dailyIncidenceConfirmedCases) {
+    public CountryCoronaDTO(String country, String continent, String date, int totalCases, int newCases, int totalDeaths, int newDeaths, float caseFatalityRatio, float dailyIncidenceConfirmedCases) {
         this.Country = country;
         this.Continent = continent;
         this.Date = date;
