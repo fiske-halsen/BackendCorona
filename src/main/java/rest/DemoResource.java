@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dto.OrderTestDTO;
 import entities.OrderTest;
 import entities.User;
+import errorhandling.OrderTestException;
 import facades.UserFacade;
 import fetcher.CountryCoronaInfoFethcer;
 import java.io.IOException;
@@ -109,10 +110,9 @@ public class DemoResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"user","admin"})
-    public Response orderTest(String orderTestJson) {
+    public Response orderTest(String orderTestJson)throws OrderTestException  {
         OrderTestDTO orderTestDTO = GSON.fromJson(orderTestJson, OrderTestDTO.class);
         orderTestDTO = FACADE.orderTest(orderTestDTO);
-
         return Response.ok(orderTestDTO).build();
     }
 
