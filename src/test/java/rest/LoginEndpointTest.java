@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import dto.CoronaInfoDTO;
 import dto.CountryCoronaDTO;
 import dto.CountryTestDTO;
@@ -46,10 +47,10 @@ public class LoginEndpointTest {
     private static EntityManagerFactory emf;
     private static final ExecutorService ES = Executors.newCachedThreadPool();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    
+
     private CoronaInfoDTO coronaInfoDTO;
     private OrderTestDTO orderTestDTO;
-    
+
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -72,7 +73,7 @@ public class LoginEndpointTest {
     public static void closeTestServer() {
         //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
-        
+
         httpServer.shutdownNow();
     }
 
@@ -90,12 +91,12 @@ public class LoginEndpointTest {
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
             User user = new User("user", "test");
-            Country country = new Country("Japan");
+            Country country = new Country("Denmark");
             CityInfo cityInfo = new CityInfo("4000", "Taastrup");
             Address address = new Address("Testgade123");
             address.setCountry(country);
             address.setCityInfo(cityInfo);
-            
+
             user.addRole(userRole);
             User admin = new User("admin", "test");
             admin.addRole(adminRole);
@@ -107,7 +108,7 @@ public class LoginEndpointTest {
             em.persist(user);
             em.persist(admin);
             em.persist(both);
-            
+
 //            em.persist(cityInfo);
 //            em.persist(address);
 //            em.persist(country);
@@ -248,6 +249,7 @@ public class LoginEndpointTest {
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
     }
+
     @Test
     public void testRestForAllRoles() {
         given()
@@ -255,24 +257,24 @@ public class LoginEndpointTest {
                 .when()
                 .get("/corona/all").then()
                 .statusCode(200)
-                .body(equalTo("[3]"));       
+                .body(equalTo("[3]"));
     }
-    
-     @Test
+
+    @Test
     public void testRestForAllCountries() {
         given()
                 .contentType("application/json")
                 .when()
                 .get("/corona/countries").then()
                 .statusCode(200)
-                .body("size()", equalTo(248));       
+                .body("size()", equalTo(248));
     }
-    
-         @Test
+
+    @Test
     public void testRestForOneCountry() throws InterruptedException, ExecutionException, TimeoutException {
-        String country = "Denmark";
+        String country = "denmark";
         coronaInfoDTO = GSON.fromJson(fetcher.CountryCoronaInfoFethcer.responseFromExternalServersParrallel(ES, GSON, country), CoronaInfoDTO.class);
-        
+
         given()
                 .contentType("application/json")
                 .when()
@@ -282,32 +284,42 @@ public class LoginEndpointTest {
                 .body("Date", equalTo(coronaInfoDTO.Date))
                 .body("TotalCases", equalTo(coronaInfoDTO.TotalCases))
                 .body("NewCases", equalTo(coronaInfoDTO.NewCases))
-                .body("TotalDeaths", equalTo(coronaInfoDTO.TotalDeaths))   
+                .body("TotalDeaths", equalTo(coronaInfoDTO.TotalDeaths))
                 .body("NewDeaths", equalTo(coronaInfoDTO.NewDeaths))
                 .body("CaseFatalityRatio", equalTo(coronaInfoDTO.CaseFatalityRatio))
                 .body("DailyIncidenceConfirmedCases", equalTo(coronaInfoDTO.DailyIncidenceConfirmedCases))
                 .body("SevenDaySmoothedDailyChange", equalTo(coronaInfoDTO.SevenDaySmoothedDailyChange))
                 .body("CumulativeTotal", equalTo(coronaInfoDTO.CumulativeTotal));
-             
+
     }
-    
-        @Test
+
+    @Test
     public void testRestOrderTest() {
+
+        JSONObject jsonObj = new JSONObject();
+
+        jsonObj.put("country", "Denmark");
+        jsonObj.put("city", "Taastrup");
+        jsonObj.put("zip", "4000");
+        jsonObj.put("street", "Testgade123");
+        jsonObj.put("email", "user");
+
         login("user", "test");
         given()
                 .contentType("application/json")
                 .accept(ContentType.JSON)
+                .body(jsonObj)
                 .header("x-access-token", securityToken)
                 .when()
                 .post("/corona/ordertest")
                 .then()
                 .statusCode(200)
-                .body("country", equalTo("Japan"))
-                .body("city", equalTo("Taastrup"))  
-                .body("zip", equalTo("4000"))  
-                .body("street", equalTo("Testgade123"))  
-                .body("email", equalTo("user"));  
-                
+                .body("country", equalTo("Denmark"))
+                .body("city", equalTo("Taastrup"))
+                .body("zip", equalTo("4000"))
+                .body("street", equalTo("Testgade123"))
+                .body("email", equalTo("user"));
+
     }
 
 }

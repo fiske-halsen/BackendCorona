@@ -35,6 +35,9 @@ public class CountryCoronaInfoFethcer {
             public CountryTestDTO call() throws Exception {
                 String countryTest = HttpUtils.fetchData(COUNTRY_TEST_URL + country);
                 CountryTestDTO[] countryTestList = gson.fromJson(countryTest, CountryTestDTO[].class);
+                if (countryTestList.length==0){
+                return new CountryTestDTO(0, 0);
+                }
                 CountryTestDTO countryTestDTO = countryTestList[countryTestList.length - 1];
                 return countryTestDTO;
             }
